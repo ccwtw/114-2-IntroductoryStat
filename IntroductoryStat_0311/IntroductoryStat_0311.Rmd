@@ -412,7 +412,22 @@ typeof(y)
 ]
 ]
 
+---
+# 資料型態（Data type）
+#### 當然我們也可以透過 `as.numeric()`、`as.character()` 等函數改變資料的型態。
 
+- 轉換資料型態的函數通常寫為 `as.*()`
+
+```{r}
+num <- 10
+as.character(num)
+```
+
+- 非數字字串轉換成數字時，會產生 NA 。
+```{r}
+cha <- 'word'
+as.numeric(cha)
+```
 ---
 class: center, middle, inverse
 

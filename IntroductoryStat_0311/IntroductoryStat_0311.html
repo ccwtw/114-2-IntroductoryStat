@@ -1757,7 +1757,7 @@ y &lt;- Sys.Date(); print(y)
 ```
 
 ```
-## [1] &quot;2026-03-11&quot;
+## [1] &quot;2026-03-17&quot;
 ```
 
 ``` r
@@ -1778,7 +1778,36 @@ typeof(y)
 ]
 ]
 
+---
+# 資料型態（Data type）
+#### 當然我們也可以透過 `as.numeric()`、`as.character()` 等函數改變資料的型態。
 
+- 轉換資料型態的函數通常寫為 `as.*()`
+
+
+``` r
+num &lt;- 10
+as.character(num)
+```
+
+```
+## [1] &quot;10&quot;
+```
+
+- 非數字字串轉換成數字時，會產生 NA 。
+
+``` r
+cha &lt;- &#39;word&#39;
+as.numeric(cha)
+```
+
+```
+## Warning: 強制變更過程中產生了 NA
+```
+
+```
+## [1] NA
+```
 ---
 class: center, middle, inverse
 
