@@ -1419,8 +1419,6 @@ ls(&#39;package:readr&#39;)
 ---
 ## 建立資料（Create）
 
-#### 從外部環境導入資料
-
 - 引用必要套件，如：`readxl`、`readr`
 
 - 設定好你的工作路徑 `setwd()`，預設為 R file 儲存的位置
@@ -1431,20 +1429,9 @@ ls(&#39;package:readr&#39;)
 
 ``` r
 library(readr)
-# &quot;你的工作路徑/檔案名稱.副檔名&quot;
-df &lt;- read_csv(&quot;./CASchools.csv&quot;)
+df &lt;- read_csv(&quot;./CASchools.csv&quot;) # &quot;你的工作路徑/檔案名稱.副檔名&quot;
 ```
 
-```
-## Rows: 420 Columns: 15
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (3): school, county, grades
-## dbl (12): rownames, district, students, teachers, calworks, lunch, computer,...
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
 - `.` 可以取代 working directory，即 `read.csv(&quot;./CASchools.csv&quot;)` 等同於
 
   `read.csv(&quot;C:/Users/user/Downloads/CASchools.csv&quot;)`  
