@@ -1,0 +1,309 @@
+---
+title: "統計學導論"
+subtitle: "實習課"
+author: |
+  <div style="margin-top:-18px; line-height:1.2;">
+    <span style="font-weight:700;">王俊欽</span><br/>
+    <span style="font-weight:700;">d14627001@ntu.edu.tw</span><br/>
+    <span style="font-weight:700;">2026/04/01</span><br/>
+    &nbsp;
+  </div>
+output:
+  xaringan::moon_reader:
+    self_contained: true
+    css: xaringan-themer.css
+    #css: [xaringan-themer.css, zh-CN.css]
+    #lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r}
+
+```
+
+layout: true
+background-image: url(https://www.agec.ntu.edu.tw/uploads/asset/data/675f864c74ccc38a768f8254/%E6%9C%AA%E4%BE%86%E5%B1%95%E6%9C%9B%E5%9C%96%E7%89%87.png)
+background-position: 98% 2%
+background-size: 5%
+
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(vistributions)
+library(gginference)
+setwd(dirname(rstudioapi::documentPath()))
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE, tidy = FALSE)
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_extra_styles(hover_code_line = TRUE)
+```
+```{r xaringanExtra, echo = FALSE}
+xaringanExtra::use_progress_bar(color = "#EFBE43", location = "bottom")
+```
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo(
+  # colors
+  primary_color = "#FDF7E9",
+  secondary_color = "#EFBE43",
+  header_color = "#333333",
+  text_color = "#333333",
+  code_inline_color = colorspace::lighten("#333333"),
+  text_bold_color = colorspace::lighten("#333333"),
+  link_color = "#4466B0",
+  title_slide_text_color = "#4466B0",
+
+  # fonts
+  header_font_google = google_font("Martel", "300", "400"),
+  text_font_google = google_font("Lato"),
+  code_font_google = google_font("Fira Mono")
+)
+
+style_extra_css(
+  # 只針對段落 (p) 和列表 (li) 內的 `code`
+  list(
+    "p code, li code" = list(  
+      "border" = "1px solid #F6DB96",
+      "padding" = "2px 4px",
+      "border-radius" = "4px"
+      ),
+    "ul ul" = list(
+      "list-style-type" = "'▸'"  # 第二層使用三角形 (▸)
+      ),
+    "ul ul ul" = list(
+      "list-style-type" = "'✔'"  # 第三層使用勾勾 (✔)
+      ),
+    # 置中
+    ".middle_block" = list(
+      "position" = "absolute",
+      "top" = "50%",
+      "left" = "50%", # 使與預設靠左距離相同
+      "transform" = "translate(-50%, -50%)",
+      "width" = "85%",              # 控制內文寬度（可調整）
+      "text-align" = "left"         
+      ),
+    # 縮排
+    ".indent" = list(
+      "text-indent" = "2em"
+      ),
+    # 自動換行
+    "pre code" = list(
+      "white-space" = "pre-wrap",
+      "word-wrap" = "break-word"
+      ),
+    "pre" = list(
+      "border" = "none",
+      "box-shadow" = "2px 2px 2px 2px #F7EEDA",
+      "padding" = "0.1em",
+      "background" = "none !important",
+      "overflow-x" = "auto",
+      "border-radius" = "1px"
+      ),
+    # 條列圖示顏色
+    "li::marker" = list(
+      "content" = "• ",
+      "color" =  "#EFBE43"
+      )
+    )
+  )
+
+```
+
+
+```{r, echo = FALSE}
+options(servr.daemon = TRUE)
+```
+
+
+---
+class: center, middle, inverse
+
+#### 學習流程控制（Control Flow）是一件仰賴邏輯判斷，且實務上經常遇到的重要環節
+
+---
+## 流程控制（Control Flow）
+
+#### 理解邏輯運算子的運用以及布林值（boolean）的概念後，學習程式有個相當重要的環節與這兩者密不可分，那就是「流程控制（Control Flow）」！
+#### 流程控制主要分為選擇（choice）與迴圈（loop）
+
+- （`if`、`else if`、`else` ）、`ifelse` 等指令可根據條件判斷並執行程式碼。
+
+- `for`、`while` 等指令可根據條件重複執行程式碼。
+
+- `break`、`next` 等指令可協助迴圈（loop）流程。
+
+#### 切記！操作流程控制（Control Flow）時，程式碼撰寫上需注意 `{}` 的使用以及縮排（Tab）、換行（Enter）的時機，如 `else`、`else if` 一定要跟著前方 `}` 符號。
+
+---
+## if 陳述
+
+#### 當遇上程式在特定情況才執行結果時，標準的寫法為 `if (條件式) {程式碼}`，如果條件式結果為 `TRUE` 則會執行程式碼。
+
+例如，銀行核發貸款時，會調用聯合徵信中心信用評分（介於200-800）作為核發貸款的初步依據。
+
+```{r}
+# 聯徵分數小於 400 ，評分為信用不佳
+credit_score <- 300
+if (credit_score <= 400){
+  print("信用不佳，拒絕貸款")
+  }
+```
+---
+## if 陳述
+
+#### 撰寫程式遇上針對不同狀況執行不同結果時，需要建立邏輯的分支點協助程式判斷，通常寫法為 `if (條件式) {程式碼 1} else {程式碼 2}`，當條件式為 `TRUE` 時執行程式碼 1，為 `FALSE` 時則執行程式碼 2。
+
+假設，聯徵分數在 200 分至 400分的區間，屬於信用不佳的評分，通過貸款機率低；在 400 以上則有機會通過貸款申請。
+```{r}
+# 聯徵分數小於 400 ，評分為信用不佳
+credit_score <- 450
+if (credit_score <= 400){
+  print("信用不佳，拒絕貸款")
+}else{
+    print("非信用不佳，審核貸款條件...")
+  }
+```
+---
+## if 陳述
+
+#### 在實務上，判斷邏輯往往不只考慮一種情形，此時可以使用巢狀寫法或是 `else if`。
+```{r}
+credit_score <- 650 ; credit_score1 <- 550
+if (credit_score <= 400){print("信用不佳，拒絕貸款")}else{
+  if (credit_score <= 600){print("非信用不佳，審核貸款條件...")}else{
+    print("信用良好，通過貸款審核")
+  }}
+
+if (credit_score1 <= 400){
+  print("信用不佳，拒絕貸款")
+  }else if(credit_score1 <= 600){
+    print("非信用不佳，審核貸款條件...")
+    }else{
+      print("信用良好，通過貸款審核")
+      }
+    
+```
+---
+## if 陳述
+#### 前面提及的 `if` 陳述中，條件式的長度僅能為 1，意即只能接受一個 `TRUE` 或 `FALSE`；`ifelse` 的條件式能接受向量化的布林值，並返回相同長度的向量。
+```{r error=TRUE}
+credit_score <- c(450, 300, 750)
+if (credit_score <= 400){
+  print("信用不佳，拒絕貸款")
+}else{
+    print("非信用不佳，審核貸款條件...")
+  }
+
+```
+---
+## if 陳述
+
+#### `ifelse()` 為向量式的運算，意即返回結果長度會與條件長度相同，通常用於二維資料中的變數處理，寫法為 `ifelse(條件, yes, no)`。
+
+```{r}
+ifelse(credit_score <= 400, "信用不佳，拒絕貸款",
+       "非信用不佳，審核貸款條件...")
+```
+---
+## for 迴圈
+#### 顧名思義是將某段程式碼重複執行很多遍，而 `for` 迴圈是用來提升這樣重複動作的效率，標準寫法為`for(iterator in iterable){程式碼}`。
+```{r}
+for (i in c(1:5)) {
+  cat("第", i, "圈執行中...\n")
+  Sys.sleep(0.7)
+}
+```
+---
+## for 迴圈
+```{r}
+# HW1 Q4
+a1 <- 11; d <- 0.5; s8 <- 0
+for (n in c(1:8)){
+  s8 <- s8 + a1 + (n - 1) * d # 每一次迴圈將 s10 加上 a1 與公差
+}
+print(s8)
+```
+- 宣告一個 iterator ( n )，即此數列共有多少值。
+
+- 宣告一個此迴圈要依序執行的 iterable ( 1 - 10 )，即此數列第 1 至第 10 項。
+
+- 每一個迴圈皆執行當等差數列加到第 n 項時，此時等差級數 n 為多少。
+
+- 重複相同的動作時，實際上在每次迴圈中將依序作出不一樣的事。
+
+---
+## for 迴圈
+.panelset[
+.panel[.panel-name[code]
+```{r eval = F}
+for (n in c(1:8)) {
+  an <- a1 + (n - 1) * d
+  
+  cat("第", n, "圈：\n")
+  cat("  第", n, "項 a", n, " = ", a1, " + (", n, " - 1) × ", d, " = ", an, "\n", sep = "")
+  cat("  目前總和 = ", s8, " + ", an, " = ", s8 + an, "\n\n", sep = "")
+  s8 <- s8 + an
+  Sys.sleep(0.7)
+}
+```
+]
+.panel[.panel-name[output]
+```{r echo = F, out.height="50%"}
+for (n in c(1:8)) {
+  an <- a1 + (n - 1) * d
+  
+  cat("第", n, "圈：\n")
+  cat("  第", n, "項 a", n, " = ", a1, " + (", n, " - 1) × ", d, " = ", an, "\n", sep = "")
+  cat("  目前總和 = ", s8, " + ", an, " = ", s8 + an, "\n\n", sep = "")
+  s8 <- s8 + an
+  Sys.sleep(0.7)
+}
+```
+]
+]
+
+
+---
+## while 迴圈
+#### 前面提到的 `for` 迴圈，主要應用場景在於你已經知道總共有多少迴圈（loop）要執行；然而，有些時候你並不知道該執行多少次迴圈才能達到你要的目的，這時，就可以使用 `while` 迴圈給定一條件式並執行迴圈，標準寫法為 `while(條件式){程式碼}`，當不符合所設定條件時則迴圈停止。
+
+```{r}
+# HW1 Q4
+a1 <- 11; d <- 0.5; s8 <- 0; n <- 1
+while (n <= 8){
+  s8 <- s8 + a1 + (n - 1) * d
+  n <- n + 1 # 每一次迴圈更新下一迴圈到第 n 項
+}
+print(s8)
+```
+#### 切記！寫 `while` 迴圈時，條件式與程式碼一定要確保有結局，否則下場則是無限迴圈...
+---
+## 流程控制（Control Flow）
+#### 針對迴圈的流程控制包含 `next`、`break` 兩種方式，通常出現在結合 if 陳述的迴圈中。
+
+- `next` 當符合特定條件，則直接前往下個迴圈。
+
+- `break` 當達到特定條件，則終止整個迴圈。
+
+``` {r}
+for (i in c(1:10)){
+  if (i <= 8) next ; print(i)
+}
+
+i <- 1
+while(i < 10){
+  if (i > 2) break ; print(i)
+  i <- i + 1
+}
+```
+
+---
+class: center, middle, inverse
+
+### 謝謝
+#### 下周見
