@@ -465,6 +465,16 @@ chisq_result
 ```{r, out.width='50%', fig.align='center', warning=F}
 ggchisqtest(chisq_result)
 ```
+---
+## 實習課進度
+
+- 5/6：正常上課
+
+- 5/13：停課
+
+- 5/20：正常上課
+
+- 5/27：上機考試 13:20 - 15:00
 
 ---
 ## HW2 說明
@@ -475,7 +485,7 @@ ggchisqtest(chisq_result)
   
 
 #### HW2繳交期限：
-- **2026-05-20 13:20**
+- **<span style="color:red">2026-05-19 13:20</span>**
 
 - **實習課作業遲交 24 小時內扣 10 分，超過時間則視為 0 分。**
 
